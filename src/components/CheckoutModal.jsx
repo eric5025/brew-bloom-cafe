@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
 import { paymentMethods } from '../data/menuData'
 import { useCart } from '../context/CartContext'
+import { useCheckout } from '../hooks/useCheckout'
 
 function randomOrderNumber() {
   return `BB${Date.now().toString().slice(-8)}`
@@ -8,21 +8,18 @@ function randomOrderNumber() {
 
 export default function CheckoutModal() {
   const { items, subtotal, checkoutOpen, closeCheckout, clearCart } = useCart()
-  const [step, setStep] = useState('method')
-  const [method, setMethod] = useState(null)
-  const [pin, setPin] = useState('')
-  const [processing, setProcessing] = useState(false)
-  const [orderNumber, setOrderNumber] = useState('')
-
-  useEffect(() => {
-    if (!checkoutOpen) {
-      setStep('method')
-      setMethod(null)
-      setPin('')
-      setProcessing(false)
-      setOrderNumber('')
-    }
-  }, [checkoutOpen])
+  const {
+    step,
+    method,
+    pin,
+    processing,
+    orderNumber,
+    setStep,
+    setMethod,
+    setPin,
+    setProcessing,
+    setOrderNumber,
+  } = useCheckout(checkoutOpen)
 
   if (!checkoutOpen) return null
 

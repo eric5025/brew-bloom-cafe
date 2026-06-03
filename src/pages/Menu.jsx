@@ -1,9 +1,11 @@
 import { useState } from 'react'
-import { menuCategories } from '../data/menuData'
+import { useMenu } from '../hooks/useMenu'
 import { useCart } from '../context/CartContext'
 import MenuCard from '../components/MenuCard'
 
 export default function Menu() {
+  const { getCategories } = useMenu()
+  const menuCategories = getCategories()
   const [active, setActive] = useState(menuCategories[0].id)
   const { addItem } = useCart()
   const current = menuCategories.find((c) => c.id === active)

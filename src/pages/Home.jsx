@@ -1,12 +1,14 @@
 import { Link } from 'react-router-dom'
-import { featuredItems, findMenuItem, getDefaultOptions } from '../data/menuData'
+import { featuredItems } from '../data/menuData'
 import { useCart } from '../context/CartContext'
+import { useMenu } from '../hooks/useMenu'
 
 export default function Home() {
   const { addItem } = useCart()
+  const { findItem, getDefaultOptions } = useMenu()
 
   function handleQuickAdd(itemId) {
-    const menuItem = findMenuItem(itemId)
+    const menuItem = findItem(itemId)
     if (!menuItem) return
     const defaults = getDefaultOptions(menuItem)
     addItem(itemId, defaults)

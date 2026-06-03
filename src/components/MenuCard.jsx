@@ -1,9 +1,13 @@
 import { useState } from 'react'
-import { useCart } from '../context/CartContext'
+import { useMenu } from '../hooks/useMenu'
 
 export default function MenuCard({ item, onAdd }) {
-  const [sizeId, setSizeId] = useState(item.options.size[0].id)
-  const [tempId, setTempId] = useState(item.options.temperature?.[0]?.id ?? null)
+  const { getDefaultOptions } = useMenu()
+  const defaults = getDefaultOptions(item)
+  const [sizeId, setSizeId] = useState(defaults.size?.id ?? item.options.size[0].id)
+  const [tempId, setTempId] = useState(
+    defaults.temperature?.id ?? item.options.temperature?.[0]?.id ?? null,
+  )
 
   const selectedSize = item.options.size.find((s) => s.id === sizeId)
   const selectedTemp = item.options.temperature?.find((t) => t.id === tempId) ?? null
