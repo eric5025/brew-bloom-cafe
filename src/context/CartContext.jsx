@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, useState } from 'react'
+import { createContext, useContext, useMemo, useState, useEffect } from 'react'
 import {
   buildCartKey,
   calcUnitPrice,
@@ -9,9 +9,27 @@ import {
 const CartContext = createContext(null)
 
 export function CartProvider({ children }) {
-  const [items, setItems] = useState([])
+  // localStorage에서 초기값 가져오기
+  const [items, setItems] = useState(() => {
+    try {
+      const saved = localStorage.getItem('brew-bloom-cart')
+      return saved ? JSON.parse(saved) : []
+    } catch (error) {
+      console.warn('Failed to load cart from localStorage:', error)
+      return []
+    }
+  })
   const [cartOpen, setCartOpen] = useState(false)
   const [checkoutOpen, setCheckoutOpen] = useState(false)
+
+  // items 변경될 때마다 localStorage에 자동 저장
+  useEffect(() => {
+    try {
+      localStorage.setItem('brew-bloom-cart', JSON.stringify(items))
+    } catch (error) {
+      console.warn('Failed to save cart to localStorage:', error)
+    }
+  }, [items])
 
   function addItem(itemId, options) {
     const menuItem = findMenuItem(itemId)
